@@ -5,21 +5,59 @@ import utils
 
 # Static Routes
 
+
 @get("/js/<filepath:re:.*\.js>")
 def js(filepath):
     return static_file(filepath, root="./js")
+
 
 @get("/css/<filepath:re:.*\.css>")
 def css(filepath):
     return static_file(filepath, root="./css")
 
+
 @get("/images/<filepath:re:.*\.(jpg|png|gif|ico|svg)>")
 def img(filepath):
     return static_file(filepath, root="./images")
 
+# dynamic routes
+
+
 @route('/')
 def index():
     sectionTemplate = "./templates/home.tpl"
-    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData = {})
+    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={})
 
-run(host='0.0.0.0', port=os.environ.get('PORT', 5000))
+
+@route('/browse')
+def browse():
+    sectionData = [utils.getJsonFromFile(show) for show in utils.AVAILABE_SHOWS]
+    sectionTemplate = "./templates/browse.tpl"
+    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData=sectionData)
+
+
+@route('/show')
+def show():
+    sectionTemplate = "./templates/show.tpl"
+    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={})
+
+
+@route('/episode')
+def episode():
+    sectionTemplate = "./templates/episode.tpl"
+    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={})
+
+
+@route('/search')
+def search():
+    sectionTemplate = "./templates/search.tpl"
+    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={})
+
+
+@route('/search_result')
+def search_result():
+    sectionTemplate = "./templates/search_result.tpl"
+    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={})
+
+
+run(host='0.0.0.0', port=os.environ.get('PORT', 5000), reloader=True, debug=True)
