@@ -1,9 +1,8 @@
 import os
 from bottle import (get, post, redirect, request, route, run, static_file,
-                    template)
-import json
+                    template, redirect)
 import utils
-
+import json
 # Static Routes
 
 
@@ -32,22 +31,28 @@ def index():
 
 @route('/browse')
 def browse():
-    sectionData = [utils.getJsonFromFile(show)
+    sectionData = [json.loads(utils.getJsonFromFile(show))
                    for show in utils.AVAILABE_SHOWS]
     sectionTemplate = "./templates/browse.tpl"
     return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData=sectionData)
 
 
-@route('//show/<show_id:int>/episode/<ep_id:int>')
+@route('/show/<show_id:int>/episode/<ep_id:int>')
 def episode():
     sectionTemplate = "./templates/episode.tpl"
     return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={})
 
 
 @route('/show/<show_id:int>')
-def show():
+def show(show_id):
+    sectionData = json.loads(utils.getJsonFromFile(show_id))
     sectionTemplate = "./templates/show.tpl"
-    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={})
+    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData=sectionData)
+
+
+@route('/ajax/show/<show_id>')
+def show_request(show_id):
+    redirect('/show/'+show_id)
 
 
 @route('/search')
