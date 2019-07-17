@@ -38,9 +38,14 @@ def browse():
 
 
 @route('/show/<show_id:int>/episode/<ep_id:int>')
-def episode():
+def episode(show_id, ep_id):
     sectionTemplate = "./templates/episode.tpl"
-    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={})
+    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData=utils.find_ep(show_id, ep_id))
+
+
+@route('/ajax/show/<show_id>/episode/<ep_id:int>')
+def episode_request(show_id, ep_id):
+    return template("./templates/episode.tpl",  result=utils.find_ep(show_id, ep_id))
 
 
 @route('/show/<show_id:int>')
@@ -52,7 +57,8 @@ def show(show_id):
 
 @route('/ajax/show/<show_id>')
 def show_request(show_id):
-    redirect('/show/'+show_id)
+    sectionData = json.loads(utils.getJsonFromFile(show_id))
+    return template("./templates/show.tpl",  result=sectionData)
 
 
 @route('/search')

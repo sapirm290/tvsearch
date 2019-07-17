@@ -12,3 +12,8 @@ def getJsonFromFile(showName):
         return template("{folder}/{filename}.json".format(folder=JSON_FOLDER, filename=showName))
     except:
         return "{}"
+def find_ep(show_id, ep_id):
+    for ep in json.loads(getJsonFromFile(show_id))['_embedded']['episodes']:
+        if ep['id'] == ep_id:
+            return ep
+    return None
