@@ -31,20 +31,21 @@ def index():
 
 @route('/browse')
 def browse():
-    sectionData = [utils.getJsonFromFile(show) for show in utils.AVAILABE_SHOWS]
+    sectionData = [utils.getJsonFromFile(show)
+                   for show in utils.AVAILABE_SHOWS]
     sectionTemplate = "./templates/browse.tpl"
     return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData=sectionData)
 
 
-@route('/show')
-def show():
-    sectionTemplate = "./templates/show.tpl"
+@route('//show/<show_id:int>/episode/<ep_id:int>')
+def episode():
+    sectionTemplate = "./templates/episode.tpl"
     return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={})
 
 
-@route('/episode')
-def episode():
-    sectionTemplate = "./templates/episode.tpl"
+@route('/show/<show_id:int>')
+def show():
+    sectionTemplate = "./templates/show.tpl"
     return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={})
 
 
@@ -54,10 +55,5 @@ def search():
     return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={})
 
 
-@route('/search_result')
-def search_result():
-    sectionTemplate = "./templates/search_result.tpl"
-    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={})
-
-
-run(host='0.0.0.0', port=os.environ.get('PORT', 5000), reloader=True, debug=True)
+run(host='localhost', port=os.environ.get(
+    'PORT', 5000), reloader=True, debug=True)
