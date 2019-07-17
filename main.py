@@ -1,6 +1,7 @@
 import os
 from bottle import (get, post, redirect, request, route, run, static_file,
                     template)
+import json
 import utils
 
 # Static Routes
@@ -53,6 +54,13 @@ def show():
 def search():
     sectionTemplate = "./templates/search.tpl"
     return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={})
+
+
+@post('/search')
+def search_result():
+    sectionTemplate = "./templates/search_result.tpl"
+    query = request.forms.get('q')
+    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={}, results={}, query=query)
 
 
 run(host='localhost', port=os.environ.get(
