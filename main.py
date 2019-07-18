@@ -39,24 +39,36 @@ def browse():
 
 @route('/show/<show_id:int>/episode/<ep_id:int>')
 def episode(show_id, ep_id):
+    section_data = find_ep(show_id, ep_id)
+    if(section_data == None):
+        redirect('/error')    
     sectionTemplate = "./templates/episode.tpl"
-    return template("./pages/index.html", version=getVersion(), sectionTemplate=sectionTemplate, sectionData=find_ep(show_id, ep_id))
+    return template("./pages/index.html", version=getVersion(), sectionTemplate=sectionTemplate, sectionData=section_data)
 
 
 @route('/ajax/show/<show_id>/episode/<ep_id:int>')
 def episode_request(show_id, ep_id):
-    return template("./templates/episode.tpl",  result=find_ep(show_id, ep_id))
+    section_data = find_ep(show_id, ep_id)
+    if(section_data ==None):
+        redirect('/error')
+    return template("./templates/episode.tpl",  result=section_data)
 
 
 @route('/show/<show_id:int>')
 def show(show_id):
     sectionTemplate = "./templates/show.tpl"
-    return template("./pages/index.html", version=getVersion(), sectionTemplate=sectionTemplate, sectionData=find_show(show_id))
+    section_data = find_show(show_id)
+    if(section_data == {}):
+        redirect('/error')
+    return template("./pages/index.html", version=getVersion(), sectionTemplate=sectionTemplate, sectionData=section_data)
 
 
 @route('/ajax/show/<show_id>')
 def show_request(show_id):
-    return template("./templates/show.tpl",  result=find_show(show_id))
+    section_data = find_show(show_id)
+    if(section_data == {}):
+        redirect('/error')
+    return template("./templates/show.tpl",  result=section_data)
 
 
 @route('/search')
