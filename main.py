@@ -1,7 +1,7 @@
 import os
 from bottle import (get, post, redirect, request, route, run, static_file,
                     template, redirect, error)
-from utils import getVersion, getJsonFromFile, find_ep, find_show, AVAILABE_SHOWS
+from utils import getVersion, getJsonFromFile, get_results, find_ep, find_show, AVAILABE_SHOWS
 import json
 # Static Routes
 
@@ -81,8 +81,8 @@ def search():
 def search_result():
     sectionTemplate = "./templates/search_result.tpl"
     query = request.forms.get('q')
-    results = utils.get_results(query)
-    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={}, results=results, query=query)
+    results = get_results(query)
+    return template("./pages/index.html", version=getVersion(), sectionTemplate=sectionTemplate, sectionData={}, results=results, query=query)
 
 
 @error(404)
