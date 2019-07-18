@@ -47,3 +47,5 @@ def get_results(query):
 
 
 get_results('stranger')
+def find_show(show_id):
+    return json.loads(getJsonFromFile(show_id))
