@@ -71,7 +71,8 @@ def search():
 def search_result():
     sectionTemplate = "./templates/search_result.tpl"
     query = request.forms.get('q')
-    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={}, results={}, query=query)
+    results = utils.get_results(query)
+    return template("./pages/index.html", version=utils.getVersion(), sectionTemplate=sectionTemplate, sectionData={}, results=results, query=query)
 
 
 run(host='localhost', port=os.environ.get(
