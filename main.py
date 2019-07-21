@@ -41,7 +41,7 @@ def browse():
 def episode(show_id, ep_id):
     section_data = find_ep(show_id, ep_id)
     if(section_data == None):
-        redirect('/error')    
+        redirect('/error')
     sectionTemplate = "./templates/episode.tpl"
     return template("./pages/index.html", version=getVersion(), sectionTemplate=sectionTemplate, sectionData=section_data)
 
@@ -49,7 +49,7 @@ def episode(show_id, ep_id):
 @route('/ajax/show/<show_id>/episode/<ep_id:int>')
 def episode_request(show_id, ep_id):
     section_data = find_ep(show_id, ep_id)
-    if(section_data ==None):
+    if(section_data == None):
         redirect('/error')
     return template("./templates/episode.tpl",  result=section_data)
 

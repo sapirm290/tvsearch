@@ -26,26 +26,33 @@ def find_ep(show_id, ep_id):
 
 
 def get_results(query):
+
+    query = query.lower()
     results = []
-    for s in AVAILABE_SHOWS:
-        text = getJsonFromFile(s)
-        in_episodes = text.find('_embedded')
-        if (text.lower().find(query.lower()) == -1):
-            print('not here')
-        elif (text.lower().find(query.lower()) < in_episodes):
-            results.append({'showid': s, 'text': json.loads(
-                text)['summary']})
-            print(f"series: {json.loads(text)['name']}")
-        else:
-            for ep in json.loads(text)['_embedded']['episodes']:
-                if str(ep['summary']).lower().find(query.lower()) != -1:
-                    print(
-                        f"episode id: {ep['id']} in series: {json.loads(text)['name']}")
-                    results.append({'showid': s, 'episodeid': ep['id'], 'text':
-                                    ep['summary']})
-    return results
+    for show in AVAILABE_SHOWS:
+        show_as_dict = json.loads(getJsonFromFile(show))
+        if(query in show_as_dict['name'].lower()):
+            results.append({
+                'showid': show_as_dict['id'],
+                'text': show_as_dict['name']
+            })
+        for episode in show_as_dict['_embedded']['episodes']:
+            try:
+                if (query in episode['name'].lower()) or (query in episode['summary'].lower()):
+                    results.append({
+                        'showid': show_as_dict['id'],
+                        'episodeid': episode['id'],
+                        'text': ':'.join([show_as_dict['name'], episode['name']])
+                    })
+            except:
+                pass
+
+    def is_episode_or_show(result):
+        if 'episodeid' in result:
+            return True
+        return False
+    return sorted(results, key=is_episode_or_show)
 
 
-get_results('stranger')
 def find_show(show_id):
     return json.loads(getJsonFromFile(show_id))
