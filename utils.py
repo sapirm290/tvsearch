@@ -26,7 +26,6 @@ def find_ep(show_id, ep_id):
 
 
 def get_results(query):
-
     query = query.lower()
     results = []
     for show in AVAILABE_SHOWS:
@@ -51,6 +50,7 @@ def get_results(query):
         if 'episodeid' in result:
             return True
         return False
+
     return sorted(results, key=is_episode_or_show)
 
 
